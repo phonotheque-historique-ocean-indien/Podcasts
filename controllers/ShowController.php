@@ -42,17 +42,50 @@ class ShowController extends ActionController
     # -------------------------------------------------------
     public function Index($type = "")
     {
+        $all_articles = ca_site_pages::getPageList();
+        $all_articles = array_reverse($all_articles);
+        $articles = [];
+        foreach ($all_articles as $testarticle) {
+            if ($testarticle["template_title"]=="podcast") {
+                $articles[] = $testarticle;
+            }
+        }
+        $articles = array_splice($articles,0, 6);
         $blocks = "";
-        for($id=1;$id<7;$id++) {
-            $page = new ca_site_pages($id);
+        foreach ($articles as $art) {
+            $page = new ca_site_pages($art["page_id"]);
             $article = $page->get("content");
             $this->view->setVar("article", $article);
-            $this->view->setVar("id", $id);
+            $this->view->setVar("id", $art["page_id"]);
             $blocks .= $this->render("home_block_html.php", true);
         }
         //$page = new ca_site_pages(1);
         $this->view->setVar("blocks", $blocks);
         $this->render('index_html.php');
+    }
+
+    public function All($type = "")
+    {
+        $all_articles = ca_site_pages::getPageList();
+        $all_articles = array_reverse($all_articles);
+        $articles = [];
+        foreach ($all_articles as $testarticle) {
+            if ($testarticle["template_title"]=="podcast") {
+                $articles[] = $testarticle;
+            }
+        }
+        $blocks = "";
+        foreach ($articles as $art) {
+//            var_dump($art);die();
+            $page = new ca_site_pages($art["page_id"]);
+            $article = $page->get("content");
+            $this->view->setVar("article", $article);
+            $this->view->setVar("id", $art["page_id"]);
+            $blocks .= $this->render("home_block_html.php", true);
+        }
+        //$page = new ca_site_pages(1);
+        $this->view->setVar("blocks", $blocks);
+        $this->render('all_podcasts_html.php');
     }
 
     public function Wall() {
@@ -67,7 +100,7 @@ class ShowController extends ActionController
         $article = $page->get("content");
         $this->view->setVar("article", $article);
 
-        $this->render('article_html.php');
+        $this->render('podcast_html.php');
     }
 
     public function List() {
