@@ -99,7 +99,6 @@ class ShowController extends ActionController
         //$page = new ca_site_pages(1);
         $article = $page->get("content");
         $this->view->setVar("article", $article);
-
         $this->render('podcast_html.php');
     }
 

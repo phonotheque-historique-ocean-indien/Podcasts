@@ -59,7 +59,9 @@ $blocks = $this->getVar("blocks");
 
 <div class="level">
     <div class="level-item has-text-centered">
-        <button class="button action-btn more is-medium has-text-weight-bold">Charger plus de podcasts</button>
+        <a href="<?php _p(__CA_URL_ROOT__) ?>/index.php/Podcasts/Show/All">
+            <button class="button action-btn more is-medium has-text-weight-bold">Charger plus de podcasts</button>
+        </a>
     </div>
 </div>
 
