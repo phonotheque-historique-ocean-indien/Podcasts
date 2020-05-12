@@ -65,6 +65,13 @@ $article = $this->getVar("article");
                         </article>
 
                         <?php break;
+                    case "quote": ?>
+
+                        <article class="article-content">
+                            <div class="quote"><?php _p($bloc["content"]); ?></div>
+                        </article>
+
+                        <?php break;
                     case "image-is-fullsize":
                         ?>
 
@@ -99,6 +106,27 @@ $article = $this->getVar("article");
                                 </div>
                                 <div class="column">
                                     <?php print str_replace("&quo;", '"', $bloc["content"]); ?>
+                                </div>
+                            </div>
+                        </article>
+
+                        <?php break;
+                    case "audio": ?>
+
+                        <article class="article-content">
+                            <div class="columns is-mobile">
+                                <div class="column is-12">
+                                    <div class="audio-player">
+                                        <h4 class="has-text-centered"><?php _p($bloc["track"]); ?></h4>
+                                        <audio
+                                                controls
+                                                style="min-width: 500px"
+                                                preload="metadata"
+                                                src="<?php _p($bloc["audio"]); ?>"
+                                        >
+                                            Your browser does not support the <code>audio</code> element.
+                                        </audio>
+                                    </div>
                                 </div>
                             </div>
                         </article>
