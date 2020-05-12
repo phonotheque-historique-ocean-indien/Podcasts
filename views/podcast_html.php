@@ -116,16 +116,40 @@ $article = $this->getVar("article");
                         <article class="article-content">
                             <div class="columns is-mobile">
                                 <div class="column is-12">
-                                    <div class="audio-player">
-                                        <h4 class="has-text-centered"><?php _p($bloc["track"]); ?></h4>
-                                        <audio
-                                                controls
-                                                style="min-width: 500px"
-                                                preload="metadata"
-                                                src="<?php _p($bloc["audio"]); ?>"
-                                        >
-                                            Your browser does not support the <code>audio</code> element.
-                                        </audio>
+                                    <div class="columns">
+                                        <div class="column">
+                                            <div class="card">
+                                                <header class="card-header">
+                                                    <div class="card-header-title">
+                                                        <div class="player-icons">
+                                                            <span class="icon">
+                                                                <i class="mdi mdi-play is-large" onclick="$('#soundplayer')[0].play();"></i>
+                                                            </span>
+                                                            <span class="icon">
+                                                                <i class="mdi mdi-stop is-large" onclick="$('#soundplayer')[0].pause();$('#soundplayer')[0].currentTime = 0"></i>
+					                                        </span>
+                                                        </div>
+                                                        <div class="column is-three-quarters is-centered">
+                                                            <div class="card-header-title player-title"
+                                                                 id="soundplayertitle">
+                                                                <audio
+                                                                    id="soundplayer"
+                                                                    src="<?php _p($bloc["audio"]); ?>"
+                                                                >
+                                                                </audio>
+                                                                <h3 id="titremorceau"><?php _p($bloc["track"]); ?></h3>
+                                                                <p id="timing" class="has-text-left">
+                                                                    <span id="position">0:00</span>/<span id="duration">0:00</span>
+                                                                </p>
+                                                            </div>
+                                                            <progress class="progress is-small"
+                                                                id="soundplayerprogression" value="0" max="100">0%
+                                                            </progress>
+                                                        </div>
+                                                    </div>
+                                                </header>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -158,6 +182,7 @@ $article = $this->getVar("article");
 
     <section class="section" id="related-playlist">
         <h1>Playlists associées</h1>
+
     </section>
 
     <section class="section" id="now-playing">
@@ -165,3 +190,32 @@ $article = $this->getVar("article");
     </section>
 
 </div>
+
+<script>
+    $(document).on("ready", function() {
+        $('#soundplayer').bind('canplay', function(){
+            var minutes = Math.floor(Math.floor(this.duration) / 60);
+            var seconds = Math.ceil(Math.floor(this.duration) % 60);
+            $('span#duration').text(minutes+":"+(seconds<10 ? "0" : "")+seconds);
+        });
+
+        var audio = document.getElementById('soundplayer');
+        audio.addEventListener('timeupdate', function () {
+            var _currentTime = parseFloat(audio.currentTime);
+            var minutes = Math.floor(Math.floor(_currentTime) / 60);
+            var seconds = Math.ceil(Math.floor(_currentTime) % 60);
+            $('span#position').text(minutes+":"+(seconds<10 ? "0" : "")+seconds);
+            var progression = _currentTime/audio.duration *100;
+            $('#soundplayerprogression').attr("value", progression);
+        }, false);
+
+        var progressBar = document.querySelector("progress");
+        progressBar.addEventListener("click", function seek(e) {
+            var percent = e.offsetX / this.offsetWidth;
+            audio.currentTime = percent * audio.duration;
+            progressBar.value = percent / 100;
+        });
+
+    });
+</script>
+</script>
