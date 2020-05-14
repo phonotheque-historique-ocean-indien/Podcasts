@@ -218,4 +218,3 @@ $article = $this->getVar("article");
 
     });
 </script>
-</script>
